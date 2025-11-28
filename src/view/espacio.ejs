@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title %></title>
+
+  <%- include("partials/head") %>
+  <link rel="stylesheet" href="/css/espacio.css">
+
+  <style>
+    /* Etiquetas tipo badge según tipo de espacio */
+    .badge-tipo {
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      display: inline-block;
+      margin-top: 4px;
+    }
+    .carro { background: #1e3a8a; color: #fff; }
+    .moto { background: #065f46; color: #fff; }
+    .especial { background: #9d174d; color: #fff; }
+
+    /* Badge estado */
+    .estado-disponible { color: #10b981; }
+    .estado-ocupado { color: #ef4444; }
+    .estado-inactivo { color: #6b7280; }
+  </style>
+</head>
+
+<body class="bg-overlay">
+
+  <%- include("partials/navigation") %>
+
+  <div class="bg-overlay">
+
+    <div class="container vh-100 d-flex justify-content-center align-items-center animate__animated animate__bounceIn">
+
+      <div class="card animated flipInY form-card shadow-sm">
+
+        <div class="card-header bg-dark text-white text-center border-secondary">
+          <h3 class="mb-0"><%= title %></h3>
+        </div>
+
+        <div class="card-body">
+
+          <% if (error) { %>
+            <div class="alert alert-danger text-center"><%= error %></div>
+          <% } %>
+
+          <form
+            action="<%= espacio.id_espacio ? '/espacio/editar/' + espacio.id_espacio : '/espacio/agregar' %>"
+            method="POST"
+            autocomplete="off">
+
+            <div class="mb-3">
+              <label for="estado" class="form-label">Estado:</label>
+              <select id="estado" name="estado"
+                class="form-control bg-dark text-white border-secondary" required>
+
+                <option value="">Seleccione...</option>
+                <option value="Disponible" <%= espacio.estado === "Disponible" ? "selected" : "" %>>
+                  Disponible
+                </option>
+                <option value="Ocupado" <%= espacio.estado === "Ocupado" ? "selected" : "" %>>
+                  Ocupado
+                </option>
+                <option value="Inactivo" <%= espacio.estado === "Inactivo" ? "selected" : "" %>>
+                  Inactivo
+                </option>
+
+              </select>
+
+              <% if (espacio.estado) { %>
+                <span class="
+                  badge-tipo
+                  <%= espacio.estado === 'Disponible' ? 'estado-disponible' : '' %>
+                  <%= espacio.estado === 'Ocupado' ? 'estado-ocupado' : '' %>
+                  <%= espacio.estado === 'Inactivo' ? 'estado-inactivo' : '' %>
+                ">
+                  Estado actual: <%= espacio.estado %>
+                </span>
+              <% } %>
+
+            </div>
+
+            <!-- TIPO -->
+            <div class="mb-3">
+              <label for="tipo" class="form-label">Tipo de espacio:</label>
+              <select id="tipo" name="tipo"
+                class="form-control bg-dark text-white border-secondary" required>
+                <option value="">Seleccione...</option>
+
+                <option value="Carro" <%= espacio.tipo === "Carro" ? "selected" : "" %>>
+                  🚘 Carro
+                </option>
+
+                <option value="Moto" <%= espacio.tipo === "Moto" ? "selected" : "" %>>
+                  🏍️ Moto
+                </option>
+
+                <option value="Especial" <%= espacio.tipo === "Especial" ? "selected" : "" %>>
+                  ♿ Especial
+                </option>
+              </select>
+
+              <% if (espacio.tipo) { %>
+                <span class="
+                  badge-tipo
+                  <%= espacio.tipo === 'Carro' ? 'carro' : '' %>
+                  <%= espacio.tipo === 'Moto' ? 'moto' : '' %>
+                  <%= espacio.tipo === 'Especial' ? 'especial' : '' %>
+                ">
+                  Tipo actual: <%= espacio.tipo %>
+                </span>
+              <% } %>
+
+            </div>
+
+            <div class="mb-3">
+              <label for="ubicacion" class="form-label">Ubicación:</label>
+              <input id="ubicacion" name="ubicacion" type="text"
+                class="form-control bg-dark text-white border-secondary"
+                placeholder="Ej: A1, B5, Nivel 2-04"
+                value="<%= espacio.ubicacion || '' %>"
+                required>
+            </div>
+
+            <div class="d-grid gap-2 mt-3">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+              <a href="/espacios/lista" class="btn btn-outline-secondary">Ir a lista</a>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <%- include("partials/head") %>
+  <link rel="stylesheet" href="/css/multa.css">
+</head>
+
+<body class="bg-overlay">
+
+  <%- include("partials/navigation") %>
+
+  <div class="bg-overlay">
+    <div class="container py-4">
+      <div class="container-box animate__animated animate__bounceIn">
+
+        <% if (error) { %>
+          <div class="alert alert-danger text-center">
+            <%= error %>
+          </div>
+        <% } %>
+
+        <% if (msg) { %>
+          <div class="alert alert-success text-center">
+            <%= msg %>
+          </div>
+        <% } %>
+
+        <h3 class="text-center mb-4">Multas registradas</h3>
+
+        <div class="mb-3">
+          <input 
+            id="buscarMulta"
+            type="text"
+            class="form-control form-control-lg"
+            placeholder="Buscar por descripción o monto..."
+          >
+        </div>
+
+        <!-- Tabla responsive para móvil -->
+        <div class="table-responsive">
+          <table id="tablaMultas" class="table table-dark table-hover text-center mb-0">
+            <thead>
+              <tr>
+                <th>Descripción</th>
+                <th>Monto ($)</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% if (multas && multas.length > 0) { %>
+                <% multas.forEach(m => { %>
+                  <tr>
+                    <td><%= m.descripcion %></td>
+                    <td><%= m.monto %></td>
+                    <td>
+                      <a href="/multa/editar/<%= m.id_multa %>" class="btn btn-success btn-sm me-2">
+                        ✏ Editar
+                      </a>
+                      <a href="/multa/eliminar/<%= m.id_multa %>" class="btn btn-danger btn-sm"
+                         onclick="return confirm('¿Seguro que deseas eliminar esta multa?');">
+                        🗑 Eliminar
+                      </a>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="3">No hay multas registradas</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="text-center mt-3">
+          <a href="/multas" class="btn btn-primary">Registrar multa</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const inputBuscar = document.getElementById("buscarMulta");
+    const tabla = document
+      .getElementById("tablaMultas")
+      .getElementsByTagName("tbody")[0];
+
+    inputBuscar.addEventListener("keyup", function () {
+      const filtro = inputBuscar.value.toLowerCase();
+
+      for (let fila of tabla.rows) {
+        const textoFila = fila.innerText.toLowerCase();
+        fila.style.display = textoFila.includes(filtro) ? "" : "none";
+      }
+    });
+  </script>
+
+</body>
+</html>

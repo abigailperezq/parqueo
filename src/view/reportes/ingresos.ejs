@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <%- include("../partials/head") %>
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.bootstrap5.min.css">
+</head>
+
+<body class="bg-overlay">
+  <%- include("../partials/navigation") %>
+
+  <div class="container mt-4 animate__animated animate__fadeIn">
+
+    <h2 class="text-center mb-4" style="color:#000;">Reporte de Ingresos por Fecha</h2>
+
+    <div class="mb-3">
+      <a href="/reportes/ingresos" class="btn btn-warning me-2">Ingresos por Fecha</a>
+      <a href="/reportes/vehiculos" class="btn btn-outline-warning">Vehículos por Día</a>
+    </div>
+
+    <form method="get" class="row g-3 mb-4">
+
+      <div class="col-md-4">
+        <label class="form-label">Fecha inicio:</label>
+        <input type="date" name="inicio" value="<%= inicio || '' %>" class="form-control">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Fecha fin:</label>
+        <input type="date" name="fin" value="<%= fin || '' %>" class="form-control">
+      </div>
+
+      <div class="col-md-4 d-flex align-items-end">
+        <button type="submit" class="btn w-100" style="background:#ffd60a; color:#000; font-weight:bold;">
+          Filtrar
+        </button>
+      </div>
+    </form>
+
+    <table id="tablaIngresos" class="table table-dark table-hover table-bordered text-center align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Fecha</th>
+          <th>Matrícula</th>
+          <th>Tipo Vehículo</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% if (datos && datos.length > 0) { %>
+          <% datos.forEach(r => { %>
+            <tr>
+              <td><%= r.fecha %></td>
+              <td><%= r.matricula %></td>
+              <td><%= r.tipo_vehiculo %></td>
+              <td>$<%= r.total_factura %></td>
+            </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+  <!-- Botones exportación -->
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+
+ <script>
+  $(document).ready(function () {
+    $('#tablaIngresos').DataTable({
+      dom: 'Bfrtip',
+      buttons: [
+        { extend: 'excel', text: 'Excel', className: 'btn btn-secondary' },
+        { extend: 'pdf',   text: 'PDF',   className: 'btn btn-secondary' },
+        { extend: 'print', text: 'Imprimir', className: 'btn btn-secondary' }
+      ],
+      language: {
+        decimal: ",",
+        thousands: ".",
+        lengthMenu: "Mostrar _MENU_ registros",
+        zeroRecords: "No se encontraron resultados",
+        info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+        infoEmpty: "Mostrando 0 a 0 de 0 registros",
+        infoFiltered: "(filtrado de _MAX_ registros totales)",
+        search: "Buscar:",
+        loadingRecords: "Cargando...",
+        processing: "Procesando...",
+        paginate: {
+          first: "Primero",
+          last: "Último",
+          next: "Siguiente",
+          previous: "Anterior"
+        }
+      }
+    });
+  });
+</script>
+
+
+</body>
+</html>

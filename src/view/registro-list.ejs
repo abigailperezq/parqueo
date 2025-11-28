@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+
+  <%- include("partials/head") %>
+  <link rel="stylesheet" href="/css/registro.css">
+</head>
+
+<body class="bg-overlay">
+
+  <%- include("partials/navigation") %>
+
+  <div class="bg-overlay">
+    <div class="container py-4">
+      <div class="container-box animate__animated animate__fadeIn">
+
+        <% if (error) { %>
+          <div class="alert alert-danger text-center">
+            <%= error %>
+          </div>
+        <% } %>
+
+        <% if (msg) { %>
+          <div class="alert alert-success text-center">
+            <%= msg %>
+          </div>
+        <% } %>
+
+        <h3 class="text-center mb-4">Registros</h3>
+
+        <div class="mb-3">
+          <input id="buscarRegistro"
+                 type="text"
+                 class="form-control form-control-lg"
+                 placeholder="Buscar por placa, espacio, fecha o horas...">
+        </div>
+
+        <!-- Tabla responsive -->
+        <div class="table-responsive">
+          <table id="tablaRegistros"
+                 class="table table-dark table-hover text-center align-middle mb-0">
+
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Entrada</th>
+                <th>Salida</th>
+                <th>Vehículo</th>
+                <th>Espacio</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% if (registros.length > 0) { %>
+
+                <% registros.forEach(r => { %>
+                  <tr>
+                    <td><%= r.fecha %></td>
+                    <td><%= r.hora_entrada %></td>
+
+                    <td>
+                      <% if (r.hora_salida) { %>
+                        <%= r.hora_salida %>
+                      <% } else { %>
+                        <span class="text-warning">— Pendiente —</span>
+                      <% } %>
+                    </td>
+
+                    <td><%= r.vehiculo %></td>
+                    <td><%= r.espacio %></td>
+
+                    <td>
+                      <% if (!r.hora_salida) { %>
+                        <a href="/registro/salida/<%= r.id_registro %>"
+                           class="btn btn-sm btn-warning me-1">
+                          🚪 Registrar salida
+                        </a>
+                      <% } %>
+
+                      <% if (r.hora_salida && !r.id_factura) { %>
+                        <a href="/factura/generar/<%= r.id_registro %>"
+                           class="btn btn-sm btn-success me-1">
+                          🧾 Generar factura
+                        </a>
+                      <% } %>
+
+                      <% if (r.id_factura) { %>
+                        <a href="/factura/detalle/<%= r.id_factura %>"
+                           class="btn btn-sm btn-info me-1">
+                          👁 Ver factura
+                        </a>
+                      <% } %>
+
+                      <a href="/registro/eliminar/<%= r.id_registro %>"
+                         class="btn btn-sm btn-danger"
+                         onclick="return confirm('¿Eliminar este registro?');">
+                        🗑 Eliminar
+                      </a>
+                    </td>
+                  </tr>
+                <% }) %>
+
+              <% } else { %>
+                <tr>
+                  <td colspan="6">No hay registros guardados.</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="text-center mt-3">
+          <a href="/registros" class="btn btn-primary">Nuevo Registro</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const buscar = document.getElementById("buscarRegistro");
+    const tbody  = document.querySelector("#tablaRegistros tbody");
+
+    buscar.addEventListener("keyup", () => {
+      const filtro = buscar.value.toLowerCase();
+      for (let fila of tbody.rows) {
+        fila.style.display =
+          fila.innerText.toLowerCase().includes(filtro) ? "" : "none";
+      }
+    });
+  </script>
+
+</body>
+</html>

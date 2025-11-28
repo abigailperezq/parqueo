@@ -1,0 +1,103 @@
+<!DOCTYPE html> 
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Clientes registrados</title>
+
+  <%- include("partials/head") %>
+  <link rel="stylesheet" href="/css/cliente.css">
+</head>
+
+<body class="bg-overlay">
+  <%- include("partials/navigation") %>
+
+  <div class="bg-overlay">
+    <div class="container py-4">
+      <div class="container-box animate__animated animate__bounceIn">
+
+        <% if (error) { %>
+          <div class="alert alert-danger text-center">
+            <%= error %>
+          </div>
+        <% } %>
+
+        <% if (msg) { %>
+          <div class="alert alert-success text-center">
+            <%= msg %>
+          </div>
+        <% } %>
+
+        <h3 class="text-center mb-4">Clientes registrados</h3>
+
+        <div class="mb-3">
+          <input 
+            id="buscarCliente" 
+            type="text" 
+            class="form-control form-control-lg"
+            placeholder="Buscar por DUI, nombre o teléfono..."
+          >
+        </div>
+
+        <div class="table-responsive">
+          <table id="tablaClientes" class="table table-dark table-hover text-center align-middle mb-0">
+            <thead>
+              <tr>
+                <th>DUI</th>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (clientes && clientes.length > 0) { %>
+                <% clientes.forEach(c => { %>
+                  <tr>
+                    <td><%= c.dui %></td>
+                    <td><%= c.nombre %></td>
+                    <td><%= c.telefono %></td>
+                    <td>
+                      <a href="/cliente/editar/<%= c.id_cliente %>" class="btn btn-sm btn-success me-1">
+                        ✏ Editar
+                      </a>
+                      <a href="/cliente/eliminar/<%= c.id_cliente %>" 
+                        class="btn btn-sm btn-danger"
+                        onclick="return confirm('¿Seguro que deseas eliminar este cliente?');">
+                        🗑 Eliminar
+                      </a>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="4">No hay clientes registrados.</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="text-center mt-3">
+          <a href="/clientes" class="btn btn-primary">Registrar nuevo cliente</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const inputBuscar = document.getElementById("buscarCliente");
+    const tabla = document.getElementById("tablaClientes").getElementsByTagName("tbody")[0];
+
+    inputBuscar.addEventListener("keyup", function () {
+      const filtro = inputBuscar.value.toLowerCase();
+
+      for (let fila of tabla.rows) {
+        const textoFila = fila.innerText.toLowerCase();
+        fila.style.display = textoFila.includes(filtro) ? "" : "none";
+      }
+    });
+  </script>
+
+</body>
+</html>

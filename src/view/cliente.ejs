@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>
+    <%= title %>
+  </title>
+  <%- include("partials/head") %>
+    <link rel="stylesheet" href="/css/cliente.css">
+</head>
+
+<body class="bg-overlay">
+  <%- include("partials/navigation") %>
+    <div class="bg-overlay">
+    <div class="container vh-100 d-flex justify-content-center align-items-center animate__animated animate__bounceIn">
+      <div class="card animated flipInY form-card shadow-sm">
+
+        <div class="card-header bg-dark text-white text-center border-secondary">
+          <h3 class="mb-0">
+            <%= title %>
+          </h3>
+        </div>
+
+        <div class="card-body">
+
+          <% if (error) { %>
+            <div class="alert alert-danger text-center">
+              <%= error %>
+            </div>
+            <% } %>
+
+              <form action="<%= cliente.id_cliente ? '/cliente/editar/' + cliente.id_cliente : '/cliente/agregar' %>"
+                method="POST" autocomplete="off">
+
+                <div class="mb-3">
+                  <label for="dui" class="form-label">DUI:</label>
+                  <input id="dui" name="dui" type="text" class="form-control bg-dark text-white border-secondary"
+                    placeholder="01234567-8" value="<%= cliente.dui || '' %>" required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="nombre" class="form-label">Nombre completo:</label>
+                  <input id="nombre" name="nombre" type="text" class="form-control bg-dark text-white border-secondary"
+                    value="<%= cliente.nombre || '' %>" required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="telefono" class="form-label">Teléfono:</label>
+                  <input id="telefono" name="telefono" type="text"
+                    class="form-control bg-dark text-white border-secondary" placeholder="7777-7777"
+                    value="<%= cliente.telefono || '' %>" required>
+                </div>
+
+                <div class="d-grid gap-2 mt-3">
+                  <button type="submit" class="btn btn-primary">Guardar</button>
+                  <a href="/clientes/lista" class="btn btn-outline-secondary">Ir a lista</a>
+                </div>
+
+              </form>
+
+        </div>
+      </div>
+    </div>
+
+</body>
+
+</html>

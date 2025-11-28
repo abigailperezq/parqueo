@@ -1,0 +1,201 @@
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: #141212fb;
+  color: #f9fafb;
+}
+
+/* Fondo con cuadricula */
+.bg-overlay {
+  min-height: 100vh;
+  background-color: #080808;
+  background-image:
+    linear-gradient(#010307 1px, transparent 1px),
+    linear-gradient(90deg, #000102 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* 🔹 Solo para la página de factura: un poco de espacio bajo el header */
+.factura-page .factura-wrapper {
+  padding-top: 90px;
+  padding-bottom: 40px;
+}
+
+/* ============================
+   TARJETA GENÉRICA (no factura)
+============================ */
+.container-box {
+  max-width: 1200px;
+  margin: 60px auto;
+  background: rgba(11, 17, 32, 0.96);
+  padding: 25px;
+  border-radius: 18px;
+  border: 1px solid #111827;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.8);
+  color: #f9fafb;
+}
+
+.container-box h3 {
+  color: #ffd60a;
+  font-weight: 700;
+}
+
+/* ============================
+   ESTILO TARJETA FACTURA
+============================ */
+.form-card {
+  width: 100%;
+  max-width: 420px;        /* 🔹 un poco más angosta */
+  margin: 0 auto;          /* centrada horizontal */
+  background: #020617;
+  border-radius: 18px;
+  border: 1px solid #111827;
+  color: #f9fafb;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
+  overflow: hidden;
+}
+
+.form-card .card-header {
+  background: #020617;
+  border-bottom: 1px solid #111827;
+  padding: 0.9rem 1.5rem;
+}
+
+.form-card .card-header h3 {
+  color: #ffd60a;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* 🔹 Menos padding = factura menos larga */
+.form-card .card-body {
+  padding: 1.2rem 1.6rem;
+}
+
+.form-card .card-body h5 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #facc15;
+  border-left: 3px solid #facc15;
+  padding-left: 0.6rem;
+}
+
+.form-card .card-body p {
+  margin-bottom: 0.2rem;
+  font-size: 0.9rem;
+  color: #e5e7eb;
+}
+
+.form-card .card-body p strong {
+  font-weight: 600;
+  color: #f9fafb;
+}
+
+.form-card .fs-4 {
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+  padding: 0.7rem 1rem;
+  border-radius: 0.9rem;
+  text-align: center;
+  background: radial-gradient(circle at top, rgba(250, 204, 21, 0.08), transparent 60%);
+  border: 1px solid rgba(250, 204, 21, 0.55);
+  color: #fef9c3;
+}
+
+/* ============================
+   BOTONES
+============================ */
+
+.btn-primary {
+  background-color: #ffd60a;
+  border-color: #ffd60a;
+  color: #111827;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background-color: #eab308;
+  border-color: #eab308;
+  color: #020617;
+}
+
+.btn-secondary {
+  background-color: #1f2937;
+  border-color: #1f2937;
+  color: #e5e7eb;
+}
+
+.btn-secondary:hover {
+  background-color: #111827;
+  border-color: #111827;
+  color: #f9fafb;
+}
+
+/* Botón imprimir */
+.btn-print {
+  border-color: #ffd60a;
+  color: #ffd60a;
+  background-color: transparent;
+  font-weight: 600;
+}
+
+.btn-print:hover {
+  background-color: #ffd60a;
+  color: #111827;
+}
+
+/* ============================
+   ESTILOS DE IMPRESIÓN
+============================ */
+@media print {
+  header,
+  .nav-wrap,
+  .navigation,
+  .navbar {
+    display: none !important;
+  }
+
+  body,
+  .bg-overlay {
+    background: #ffffff !important;
+  }
+
+  .form-card {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .form-card .card-header {
+    background: #ffffff !important;
+    color: #000 !important;
+    border-bottom: 1px solid #000 !important;
+  }
+
+  .form-card .card-header h3 {
+    color: #000 !important;
+  }
+
+  .form-card .card-body h5 {
+    color: #000 !important;
+    border-color: #000 !important;
+  }
+
+  .btn-print,
+  .btn-secondary {
+    display: none !important;
+  }
+}
+
+.factura-page .factura-wrapper {
+  padding-top: 70px;   
+  padding-bottom: 60px;
+}

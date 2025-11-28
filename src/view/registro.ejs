@@ -1,0 +1,157 @@
+<!DOCTYPE html> 
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+
+  <%- include("partials/head") %>
+  <link rel="stylesheet" href="/css/registro.css">
+</head>
+
+<body class="bg-overlay">
+  <%- include("partials/navigation") %>
+
+  <div class="bg-overlay">
+
+    <div class="container vh-100 d-flex justify-content-center align-items-center animate__animated animate__fadeIn">
+
+      <div class="card form-card shadow-sm">
+
+        <div class="card-header text-center border-secondary">
+          <h3 style="color:#ffd60a;"><%= title %></h3>
+        </div>
+
+        <div class="card-body">
+
+          <% if (error) { %>
+            <div class="alert alert-danger text-center"><%= error %></div>
+          <% } %>
+
+          <!-- SOLO ENTRADA -->
+          <form action="/registro/agregar" method="POST">
+
+            <!-- FECHA -->
+            <div class="mb-3">
+              <label class="form-label">Fecha:</label>
+              <input 
+                type="date" 
+                name="fecha" 
+                class="form-control bg-dark text-white border-secondary"
+                value="<%= datos.fecha || '' %>" 
+                required>
+            </div>
+
+            <!-- HORA DE ENTRADA -->
+            <div class="mb-3">
+              <label class="form-label">Hora de Entrada:</label>
+              <input 
+                type="time" 
+                name="hora_entrada" 
+                class="form-control bg-dark text-white border-secondary"
+                value="<%= datos.hora_entrada || '' %>" 
+                required>
+            </div>
+
+            <!-- VEHICULO -->
+            <div class="mb-3">
+              <label class="form-label">Vehículo (Placa):</label>
+              <select 
+                id="vehiculo"
+                name="id_vehiculo" 
+                class="form-control bg-dark text-white border-secondary" 
+                required>
+
+                <option value="">Seleccione un vehículo</option>
+
+                <% listaVehiculos.forEach(v => { %>
+
+                  <option value="<%= v.id_vehiculo %>"
+                    data-tipo="<%= v.nombre_tipo_vehiculo %>"
+                    <%= datos.id_vehiculo == v.id_vehiculo ? 'selected' : '' %>>
+                    
+                    <%= v.matricula %> — <%= v.nombre_tipo_vehiculo %>
+
+                  </option>
+
+                <% }) %>
+
+              </select>
+            </div>
+
+            <!-- ESPACIO -->
+            <div class="mb-3">
+              <label class="form-label">Espacio:</label>
+
+              <select 
+                id="espacio"
+                name="id_espacio" 
+                class="form-control bg-dark text-white border-secondary" 
+                required>
+
+                <option value="">Seleccione un vehículo primero</option>
+
+              </select>
+            </div>
+
+            <div class="d-grid gap-2 mt-3">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+              <a href="/registros/lista" class="btn btn-outline-secondary">Ir a Lista</a>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT PARA CARGAR ESPACIOS -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+      const vehiculoSelect = document.getElementById("vehiculo");
+      const espacioSelect = document.getElementById("espacio");
+
+      vehiculoSelect.addEventListener("change", async function () {
+
+        espacioSelect.innerHTML = `<option value="">Cargando espacios...</option>`;
+
+        const tipoVehiculo = this.selectedOptions[0].getAttribute("data-tipo");
+
+        if (!tipoVehiculo) {
+          espacioSelect.innerHTML = `<option value="">Seleccione un vehículo primero</option>`;
+          return;
+        }
+
+        try {
+          const response = await fetch(`/espacios/disponibles/${tipoVehiculo}`);
+          const espacios = await response.json();
+
+          espacioSelect.innerHTML = "";
+
+          if (espacios.length === 0) {
+            espacioSelect.innerHTML =
+              `<option value="">No hay espacios disponibles</option>`;
+            return;
+          }
+
+          espacioSelect.innerHTML = `<option value="">Seleccione un espacio</option>`;
+          
+          espacios.forEach(e => {
+            espacioSelect.innerHTML += `
+              <option value="${e.id_espacio}">
+                ${e.ubicacion}
+              </option>`;
+          });
+
+        } catch (err) {
+          espacioSelect.innerHTML = `<option value="">Error al cargar espacios</option>`;
+          console.error(err);
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

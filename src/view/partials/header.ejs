@@ -1,0 +1,52 @@
+<header id="header" class="header fixed-top">
+
+  <div class="container-fluid container-xl position-relative d-flex justify-content-between align-items-center pt-2">
+
+    <a href="/" class="d-flex align-items-center gap-3">
+      <h1 class="sitename m-0">Quick Park</h1>
+      <img src="/img/logo/logo.jpg" alt="Quick Park Logo" class="logo-img animate-logo">
+    </a>
+
+    <div class="d-flex align-items-center gap-2">
+      <% if (usuario) { %>
+        <span class="text-warning d-none d-sm-inline">
+          Bienvenido <strong class="text-white">
+            <%= usuario.nombre %>
+          </strong>
+        </span>
+        <a href="/logout" class="btn btn-sm btn-yellow">Salir</a>
+        <% } %>
+
+          <button class="mobile-nav-toggle d-xl-none btn btn-sm btn-outline-light ms-2" type="button" aria-label="Menú">
+            <i class="bi bi-list"></i>
+          </button>
+
+
+    </div>
+
+  </div>
+
+  <div class="mobile-nav-overlay d-xl-none"></div>
+
+  <div class="nav-wrap mt-3">
+    <div class="container d-flex justify-content-center">
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="/" class="active"><i class="bi bi-house"></i> Inicio</a></li>
+          <li><a href="/clientes"><i class="bi bi-person"></i> Clientes</a></li>
+          <li><a href="/vehiculos"><i class="bi bi-car-front"></i> Vehículos</a></li>
+          <li><a href="/espacios"><i class="bi bi-grid"></i> Espacios</a></li>
+          <li><a href="/registros"><i class="bi bi-clock-history"></i> Registros</a></li>
+          <li><a href="/factura"><i class="bi bi-receipt"></i> Facturación</a></li>
+          <li><a href="/multas"><i class="bi bi-exclamation-triangle"></i> Multas</a></li>
+
+          <% if (usuario && usuario.rol==="ADMIN" ) { %>
+            <li><a href="/usuario/lista"><i class="bi bi-people"></i> Usuarios</a></li>
+            <li><a href="/rol/lista"><i class="bi bi-people"></i> Rol</a></li>
+            <% } %>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+</header>

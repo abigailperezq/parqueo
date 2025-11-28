@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Espacios registrados</title>
+
+  <%- include("partials/head") %>
+  <link rel="stylesheet" href="/css/espacio.css">
+</head>
+
+<body class="bg-overlay">
+  <%- include("partials/navigation") %>
+
+  <div class="bg-overlay">
+    <div class="container py-4">
+      <div class="container-box animate__animated animate__bounceIn">
+
+        <% if (error) { %>
+          <div class="alert alert-danger text-center">
+            <%= error %>
+          </div>
+        <% } %>
+
+        <% if (msg) { %>
+          <div class="alert alert-success text-center">
+            <%= msg %>
+          </div>
+        <% } %>
+
+        <h3 class="text-center mb-4">Espacios registrados</h3>
+
+        <div class="mb-3">
+          <input
+            id="buscarEspacio"
+            type="text"
+            class="form-control form-control-lg"
+            placeholder="Buscar por estado, tipo o ubicación..."
+          >
+        </div>
+
+        <div class="table-responsive">
+          <table id="tablaEspacios" class="table table-dark table-hover text-center align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Estado</th>
+                <th>Tipo</th>
+                <th>Ubicación</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% if (espacios && espacios.length > 0) { %>
+                <% espacios.forEach(e => { %>
+                  <tr>
+                    <td><%= e.estado %></td>
+                    <td><%= e.tipo %></td>
+                    <td><%= e.ubicacion %></td>
+                    <td>
+                      <a href="/espacio/editar/<%= e.id_espacio %>"
+                         class="btn btn-sm btn-success me-1">
+                        ✏ Editar
+                      </a>
+
+                      <a href="/espacio/eliminar/<%= e.id_espacio %>"
+                         class="btn btn-sm btn-danger"
+                         onclick="return confirm('¿Seguro que deseas eliminar este espacio?');">
+                        🗑 Eliminar
+                      </a>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="4">No hay espacios registrados.</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="text-center mt-3">
+          <a href="/espacios" class="btn btn-primary">Registrar nuevo espacio</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const inputBuscar = document.getElementById("buscarEspacio");
+    const tabla = document
+      .getElementById("tablaEspacios")
+      .getElementsByTagName("tbody")[0];
+
+    inputBuscar.addEventListener("keyup", function () {
+      const filtro = inputBuscar.value.toLowerCase();
+
+      for (let fila of tabla.rows) {
+        const textoFila = fila.innerText.toLowerCase();
+        fila.style.display = textoFila.includes(filtro) ? "" : "none";
+      }
+    });
+  </script>
+
+</body>
+</html>

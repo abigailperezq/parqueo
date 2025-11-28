@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+
+  <%- include("partials/head") %>
+  <link rel="stylesheet" href="/css/rol.css">
+</head>
+
+<body class="bg-overlay">
+
+  <%- include("partials/navigation") %>
+
+  <div class="bg-overlay">
+    <div class="container py-4">
+      <div class="container-box animate__animated animate__bounceIn">
+
+        <% if (error) { %>
+          <div class="alert alert-danger text-center">
+            <%= error %>
+          </div>
+        <% } %>
+
+        <% if (msg) { %>
+          <div class="alert alert-success text-center">
+            <%= msg %>
+          </div>
+        <% } %>
+
+        <h3 class="text-center mb-4">Roles registrados</h3>
+
+        <div class="mb-3">
+          <input 
+            id="buscarRol"
+            type="text"
+            class="form-control form-control-lg"
+            placeholder="Buscar rol..."
+          >
+        </div>
+
+        <!-- Tabla responsive para móvil -->
+        <div class="table-responsive">
+          <table id="tablaRoles" class="table table-dark table-hover text-center align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Rol</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% if (roles && roles.length > 0) { %>
+                <% roles.forEach(r => { %>
+                  <tr>
+                    <td><%= r.rol %></td>
+                    <td>
+                      <a href="/rol/editar/<%= r.id_rol %>" class="btn btn-sm btn-success me-1">
+                        ✏ Editar
+                      </a>
+                      <a href="/rol/eliminar/<%= r.id_rol %>" class="btn btn-sm btn-danger"
+                         onclick="return confirm('¿Seguro que deseas eliminar este rol?');">
+                        🗑 Eliminar
+                      </a>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="2">No hay roles registrados.</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="text-center mt-3">
+          <a href="/rol" class="btn btn-primary">Registrar nuevo rol</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const inputBuscar = document.getElementById("buscarRol");
+    const tabla = document
+      .getElementById("tablaRoles")
+      .getElementsByTagName("tbody")[0];
+
+    inputBuscar.addEventListener("keyup", function () {
+      const filtro = inputBuscar.value.toLowerCase();
+
+      for (let fila of tabla.rows) {
+        const textoFila = fila.innerText.toLowerCase();
+        fila.style.display = textoFila.includes(filtro) ? "" : "none";
+      }
+    });
+  </script>
+
+</body>
+</html>

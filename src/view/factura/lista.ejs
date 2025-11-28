@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+
+  <%- include("../partials/head") %>
+  <link rel="stylesheet" href="/css/registro.css">
+</head>
+
+<body class="bg-overlay">
+  <%- include("../partials/navigation") %>
+
+  <div class="bg-overlay">
+    <div class="container-box animate__animated animate__fadeIn">
+
+      <h3 class="text-center mb-4">Facturas</h3>
+
+      <div class="mb-3">
+        <input id="buscarFactura"
+               type="text"
+               class="form-control form-control-lg"
+               placeholder="Buscar por fecha, usuario, multa, cliente...">
+      </div>
+
+      <table id="tablaFacturas"
+             class="table table-dark table-hover text-center align-middle">
+
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Entrada</th>
+            <th>Salida</th>
+            <th>Usuario</th>
+            <th>Multa</th>
+            <th>Total factura</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% if (facturas && facturas.length > 0) { %>
+
+            <% facturas.forEach(f => { %>
+              <tr>
+
+                <td><%= f.fecha || "" %></td>
+                <td><%= f.hora_entrada %></td>
+                <td><%= f.hora_salida %></td>
+
+                <td><%= f.nombre_usuario || "" %></td>
+
+                <td>
+                  <% if (f.multa_descripcion) { %>
+                    <%= f.multa_descripcion %>
+                    ($<%= f.multa_monto != null ? parseFloat(f.multa_monto).toFixed(2) : "0.00" %>)
+                  <% } else { %>
+                    Sin multa
+                  <% } %>
+                </td>
+
+                <td>
+                  $<%= f.total_factura != null ? parseFloat(f.total_factura).toFixed(2) : "0.00" %>
+                </td>
+
+                <td>
+                  <a href="/factura/detalle/<%= f.id_factura %>"
+                     class="btn btn-sm btn-info me-1">
+                    Ver
+                  </a>
+
+                  <form action="/factura/eliminar/<%= f.id_factura %>"
+                        method="POST"
+                        style="display:inline;"
+                        onsubmit="return confirm('¿Eliminar esta factura?');">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                      🗑
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+
+          <% } else { %>
+            <tr>
+              <td colspan="7">No hay facturas registradas.</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <script>
+    const buscar = document.getElementById("buscarFactura");
+    const tbody = document.querySelector("#tablaFacturas tbody");
+
+    buscar.addEventListener("keyup", () => {
+      const filtro = buscar.value.toLowerCase();
+      for (let fila of tbody.rows) {
+        fila.style.display =
+          fila.innerText.toLowerCase().includes(filtro)
+            ? ""
+            : "none";
+      }
+    });
+  </script>
+
+</body>
+</html>

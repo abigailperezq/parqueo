@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title %></title>
+  <%- include("partials/head") %>
+</head>
+
+<body class="login-page">
+
+  <div class="login-wrapper">
+
+    <div class="login-inner">
+
+      <div class="login-left p-4 p-md-5">
+        <h3 class="text-light mb-4">Inicio</h3>
+
+        <% if (error) { %>
+          <div class="alert alert-danger text-center py-2 mb-3">
+            <%= error %>
+          </div>
+        <% } %>
+
+        <form action="/login" method="POST" autocomplete="off">
+
+          <div class="mb-3">
+            <label for="usuario" class="form-label text-white small">Usuario</label>
+            <div class="input-group">
+              <span class="input-group-text login-input-icon">
+                <i class="bi bi-person"></i>
+              </span>
+              <input
+                id="usuario"
+                name="usuario"
+                type="text"
+                class="form-control login-input"
+                placeholder="Ingresa tu usuario"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="clave" class="form-label text-white small">Contraseña</label>
+            <div class="input-group">
+              <span class="input-group-text login-input-icon">
+                <i class="bi bi-lock"></i>
+              </span>
+              <input
+                id="clave"
+                name="clave"
+                type="password"
+                class="form-control login-input"
+                placeholder="Ingresa tu contraseña"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn login-btn">
+              Iniciar sesión
+            </button>
+          </div>
+
+        </form>
+
+        <p class="text-muted small mt-4 mb-0">
+          Sistema de parqueo · <%= new Date().getFullYear() %>
+        </p>
+      </div>
+
+      <div class="login-right d-none d-md-flex flex-column justify-content-center align-items-center text-center p-4">
+        <h4 class="text-uppercase fw-bold mb-3">Bienvenido!</h4>
+        <p class="small mb-0">
+          Quick Park.<br />
+          Gestiona Entradas y Salidas<br />
+          ...................
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

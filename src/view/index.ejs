@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+  <%- include("partials/head", { title: "Sistema de Parqueo" }) %>
+
+<body class="bg-overlay">
+
+  <%- include("partials/header") %>
+
+  <section class="hero section dark-background">
+
+    <div class="video-background">
+      <video autoplay muted loop playsinline>
+        <source src="/img/video/video2.mp4" type="video/mp4">
+        Tu navegador no soporta el video.
+      </video>
+      <div class="video-overlay"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="container text-center">
+        <h1 class="mt-5 pt-5 text-white">Sistema de Parqueo</h1>
+        <p class="text-light">Control de vehículos — Entradas y Salidas</p>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="reportes-home-section py-5">
+    <div class="container">
+
+      <h2 class="text-center text-light mb-4">Reportes rápidos</h2>
+      <p class="text-center text-muted mb-5">
+        Consulta información clave del parqueo con un solo clic.
+      </p>
+
+      <div class="row justify-content-center g-4">
+
+        <div class="col-md-6">
+          <a href="/reportes/ingresos" class="reporte-card">
+            <div class="reporte-icon">
+              <i class="bi bi-cash-coin"></i>
+            </div>
+            <div class="reporte-texto">
+              <h4>Ingresos por fecha</h4>
+              <p>Consulta el total facturado en un rango de fechas.</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-6">
+          <a href="/reportes/vehiculos" class="reporte-card">
+            <div class="reporte-icon">
+              <i class="bi bi-car-front"></i>
+            </div>
+            <div class="reporte-texto">
+              <h4>Vehículos que ingresaron</h4>
+              <p>Lista de vehículos registrados en el parqueo.</p>
+            </div>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <%- include("partials/footer") %>
+  <%- include("partials/scripts") %>
+
+  <!-- SCRIPT MENÚ MÓVIL -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const navMenu  = document.getElementById("navmenu");
+      const toggle   = document.querySelector(".mobile-nav-toggle");
+      let overlay    = document.querySelector(".mobile-nav-overlay");
+      const body     = document.body;
+
+      if (!navMenu || !toggle) return;
+
+      // Crear overlay si no existe
+      if (!overlay) {
+        overlay = document.createElement("div");
+        overlay.className = "mobile-nav-overlay";
+        document.body.appendChild(overlay);
+      }
+
+      function openMenu() {
+        navMenu.classList.add("navmenu-mobile");
+        overlay.classList.add("active");
+        body.classList.add("mobile-nav-open");
+
+        // El toggle ES el ícono
+        toggle.classList.remove("bi-list");
+        toggle.classList.add("bi-x");
+      }
+
+      function closeMenu() {
+        navMenu.classList.remove("navmenu-mobile");
+        overlay.classList.remove("active");
+        body.classList.remove("mobile-nav-open");
+
+        toggle.classList.remove("bi-x");
+        toggle.classList.add("bi-list");
+      }
+
+      toggle.addEventListener("click", () => {
+        if (navMenu.classList.contains("navmenu-mobile")) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      });
+
+      overlay.addEventListener("click", closeMenu);
+
+      // Cerrar al hacer clic en cualquier link del menú
+      navMenu.querySelectorAll("a").forEach(a => {
+        a.addEventListener("click", closeMenu);
+      });
+    });
+  </script>
+
+</body>
+</html>

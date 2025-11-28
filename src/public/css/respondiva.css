@@ -1,0 +1,72 @@
+/* ===== AJUSTES GENERALES PARA PANTALLAS PEQUEÑAS ===== */
+@media (max-width: 768px) {
+
+  /* Contenedor de tarjetas (formularios) */
+  .form-card {
+    width: 100%;
+    max-width: 480px;
+    margin: 0.75rem;
+  }
+
+  /* Contenedor de listas (ej. registros, clientes, espacios, etc.) */
+  .container-box {
+    margin: 1.5rem 0.75rem;
+    padding: 1rem;
+  }
+
+  /* Títulos un poco más pequeños */
+  .card-header h3,
+  .container-box h3,
+  .section-title h2 {
+    font-size: 1.2rem;
+  }
+
+  /* Inputs y botones más cómodos en cel */
+  .form-control,
+  .form-select {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+    padding: 0.35rem 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Menos padding lateral en header */
+  .header .container-xl {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Logo y texto un poco más pequeños */
+  .sitename {
+    font-size: 1.4rem;
+  }
+
+  .logo-img {
+    width: 55px;
+    height: 55px;
+  }
+
+  /* El nav en columna en lugar de una fila larga */
+  .navmenu ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0;
+  }
+
+  .navmenu a {
+    font-size: 0.9rem;
+  }
+
+  .nav-wrap {
+    margin-top: 0.4rem;
+  }
+}
+
