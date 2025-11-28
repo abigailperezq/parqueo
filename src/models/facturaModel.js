@@ -1,3 +1,4 @@
+import mysql from 'mysql2';
 import db from "../config/db.js";
 
 export const facturaModel = {
@@ -16,7 +17,7 @@ export const facturaModel = {
         r.hora_salida,
 
         v.matricula                  AS matricula,
-        c.nombre                     AS nombre_cliente,   -- ajusta el nombre de columna si es distinto
+        c.nombre                     AS nombre_cliente,
 
         u.nombre                     AS nombre_usuario,
         m.descripcion                AS multa_descripcion,
@@ -47,7 +48,7 @@ export const facturaModel = {
         r.hora_salida,
 
         v.matricula                  AS matricula,
-        c.nombre                     AS nombre_cliente,   -- ajusta aquí igual
+        c.nombre                     AS nombre_cliente,
 
         u.nombre                     AS nombre_usuario,
         m.descripcion                AS multa_descripcion,
@@ -66,10 +67,8 @@ export const facturaModel = {
   },
 
   async generarFactura({ id_registro, id_usuario, id_multa = null }) {
-    await db.query(
-      "CALL sp_generar_factura(?, ?, ?)",
-      [id_registro, id_usuario, id_multa]
-    );
+    const sql = mysql.format("CALL sp_generar_factura(?, ?, ?)", [id_registro, id_usuario, id_multa]);
+    await db.query(sql);
 
     const [rows] = await db.query(
       `

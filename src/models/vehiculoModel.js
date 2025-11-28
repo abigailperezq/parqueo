@@ -1,4 +1,4 @@
-// models/vehiculoModel.js
+import mysql from 'mysql2';
 import pool from "../config/db.js";
 
 export const VehiculoModel = {
@@ -20,29 +20,25 @@ export const VehiculoModel = {
   },
 
   async crear({ color, marca, matricula, modelo, id_cliente, id_tipo_vehiculo }) {
-
-    const [rows] = await pool.query(
+    const sql = mysql.format(
       "CALL sp_vehiculo_crear(?,?,?,?,?,?)",
       [color, marca, matricula, modelo, id_cliente, id_tipo_vehiculo]
     );
+
+    const [rows] = await pool.query(sql);
 
     const insertId = rows[0][0].id_vehiculo;
     return insertId;
   },
 
   async obtenerPorId(id) {
-    const [rows] = await pool.query(
-      "SELECT * FROM vehiculo WHERE id_vehiculo = ?",
-      [id]
-    );
+    const sql = mysql.format("SELECT * FROM vehiculo WHERE id_vehiculo = ?", [id]);
+    const [rows] = await pool.query(sql);
     return rows[0];
   },
 
-  async actualizar(
-    id,
-    { color, marca, matricula, modelo, id_cliente, id_tipo_vehiculo }
-  ) {
-    await pool.query(
+  async actualizar(id, { color, marca, matricula, modelo, id_cliente, id_tipo_vehiculo }) {
+    const sql = mysql.format(
       "CALL sp_vehiculo_actualizar(?,?,?,?,?,?,?)",
       [
         Number(id),
@@ -55,11 +51,13 @@ export const VehiculoModel = {
       ]
     );
 
+    await pool.query(sql);
     return true;
   },
 
   async eliminar(id) {
-    await pool.query("CALL sp_vehiculo_eliminar(?)", [id]);
+    const sql = mysql.format("CALL sp_vehiculo_eliminar(?)", [id]);
+    await pool.query(sql);
     return true;
   }
 };

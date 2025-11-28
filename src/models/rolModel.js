@@ -1,3 +1,4 @@
+import mysql from 'mysql2';
 import pool from "../config/db.js";
 
 export const RolModel = {
@@ -10,10 +11,9 @@ export const RolModel = {
   async crear(data) {
     const { rol } = data;
 
-    const [rows] = await pool.query(
-      "CALL sp_rol_crear(?)",
-      [rol]
-    );
+    const sql = mysql.format("CALL sp_rol_crear(?)", [rol]);
+    const [rows] = await pool.query(sql);
+
     const insertId = rows[0][0].id_rol;
     return insertId;
   },
@@ -29,19 +29,16 @@ export const RolModel = {
   async actualizar(id, datos) {
     const { rol } = datos;
 
-    await pool.query(
-      "CALL sp_rol_actualizar(?, ?)",
-      [Number(id), rol]
-    );
+    const sql = mysql.format("CALL sp_rol_actualizar(?, ?)", [Number(id), rol]);
+    await pool.query(sql);
 
     return true;
   },
 
   async eliminar(id) {
-    await pool.query(
-      "CALL sp_rol_eliminar(?)",
-      [Number(id)]
-    );
+    const sql = mysql.format("CALL sp_rol_eliminar(?)", [Number(id)]);
+    await pool.query(sql);
+    
     return true;
   }
 };

@@ -1,3 +1,4 @@
+import mysql from 'mysql2';
 import pool from "../config/db.js";
 
 export const multaModel = {
@@ -9,10 +10,8 @@ export const multaModel = {
   async crear(data) {
     const { descripcion, monto } = data;
 
-    const [rows] = await pool.query(
-      "CALL sp_multa_crear(?,?)",
-      [descripcion, monto]
-    );
+    const sql = mysql.format("CALL sp_multa_crear(?,?)", [descripcion, monto]);
+    const [rows] = await pool.query(sql);
 
     const insertId = rows[0][0].id_multa;
     return insertId;
@@ -29,16 +28,15 @@ export const multaModel = {
   async actualizar(id, datos) {
     const { descripcion, monto } = datos;
 
-    await pool.query(
-      "CALL sp_multa_actualizar(?,?,?)",
-      [Number(id), descripcion, monto]
-    );
+    const sql = mysql.format("CALL sp_multa_actualizar(?,?,?)", [Number(id), descripcion, monto]);
+    await pool.query(sql);
 
     return true;
   },
 
   async eliminar(id) {
-    await pool.query("CALL sp_multa_eliminar(?)", [Number(id)]);
+    const sql = mysql.format("CALL sp_multa_eliminar(?)", [Number(id)]);
+    await pool.query(sql);
     return true;
   }
 };

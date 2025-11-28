@@ -1,6 +1,8 @@
+import mysql from 'mysql2'; 
 import db from "../config/db.js";
 
 export const ClienteModel = {
+  
   async obtenerTodos() {
     const [rows] = await db.query(`
       SELECT id_cliente, dui, nombre, telefono
@@ -21,24 +23,28 @@ export const ClienteModel = {
   async crear(data) {
     const { dui, nombre, telefono } = data;
 
-    const [rows] = await db.query(
-      "CALL sp_cliente_crear(?,?,?)",
-      [dui, nombre, telefono]
-    );
+    const sql = mysql.format("CALL sp_cliente_crear(?,?,?)", [dui, nombre, telefono]);
 
-    const insertId = rows[0][0].id_cliente;
-    return insertId;
+    const [rows] = await db.query(sql);
+
+    if (rows && rows[0] && rows[0][0]) {
+        const insertId = rows[0][0].id_cliente; 
+        return insertId;
+    }
+    return null; 
   },
 
   async actualizar(id, data) {
     const { dui, nombre, telefono } = data;
 
-    await db.query("CALL sp_cliente_actualizar(?,?,?,?)", [
+    const sql = mysql.format("CALL sp_cliente_actualizar(?,?,?,?)", [
       Number(id),
       dui,
       nombre,
       telefono,
     ]);
+
+    await db.query(sql);
   },
 
   async eliminar(id) {

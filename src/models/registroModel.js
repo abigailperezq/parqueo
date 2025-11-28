@@ -1,3 +1,4 @@
+import mysql from 'mysql2';
 import pool from "../config/db.js";
 
 export const RegistroModel = {
@@ -46,10 +47,11 @@ export const RegistroModel = {
   async crear(data) {
     const { fecha, hora_entrada, id_espacio, id_vehiculo } = data;
 
-    const [rows] = await pool.query(
-      "CALL sp_registro_crear(?,?,?,?)",
-      [fecha, hora_entrada, id_espacio, id_vehiculo]
-    );
+    // Usamos mysql.format para los parámetros del CALL
+    const sql = mysql.format("CALL sp_registro_crear(?,?,?,?)", [fecha, hora_entrada, id_espacio, id_vehiculo]);
+    const [rows] = await pool.query(sql);
+    
+    // Este procedimiento no recibe parámetros, así que funciona directo
     await pool.query("CALL sp_espacio_sincronizar_estados()");
 
     const insertId = rows[0][0].id_registro;
@@ -62,34 +64,34 @@ export const RegistroModel = {
     const horaSalidaFinal =
       hora_salida === "" || hora_salida === undefined ? null : hora_salida;
 
-    await pool.query(
-      "CALL sp_registro_actualizar(?,?,?,?,?,?)",
-      [
+    const sql = mysql.format("CALL sp_registro_actualizar(?,?,?,?,?,?)", [
         Number(id),
         fecha,
         hora_entrada,
         horaSalidaFinal,
         id_espacio,
         id_vehiculo
-      ]
-    );
+    ]);
+    await pool.query(sql);
+
     await pool.query("CALL sp_espacio_sincronizar_estados()");
 
     return true;
   },
 
   async registrarSalida(id, hora_salida) {
-    await pool.query(
-      "CALL sp_registro_registrar_salida(?,?)",
-      [Number(id), hora_salida]
-    );
+    const sql = mysql.format("CALL sp_registro_registrar_salida(?,?)", [Number(id), hora_salida]);
+    await pool.query(sql);
+
     await pool.query("CALL sp_espacio_sincronizar_estados()");
 
     return true;
   },
 
   async eliminar(id) {
-    await pool.query("CALL sp_registro_eliminar(?)", [Number(id)]);
+    const sql = mysql.format("CALL sp_registro_eliminar(?)", [Number(id)]);
+    await pool.query(sql);
+    
     await pool.query("CALL sp_espacio_sincronizar_estados()");
 
     return true;
